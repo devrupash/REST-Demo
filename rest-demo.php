@@ -103,14 +103,29 @@ class Rest_Demo{
 		);
 		return new WP_REST_Response($response, 200);
 	}
-	function process_person($request){
-		$name = $request['name'];
-		$email = $request['email'];
-		$response = array(
-			"name" => $name,
-			"email" => $email,
-		);
-		return new WP_REST_Response($response, 200);
+	function handle_contact($request){
+		$method = $request->get_method();
+		if($method === "GET"){
+			// return a form
+			$form = '<form method="POST">
+					<input type="text" name="name">
+					<input type="email" name="email">
+					<input type="submit">
+				</form>';
+			$data = array(
+				"form" => esc_html($form),
+			);
+			return new WP_REST_Response($data, 200);
+		}else{
+			// if POST process the form
+			$name = $request->get_param('name');
+			$email = $request->get_param('email');
+			$response = array(
+				"name" => $name,
+				"email" => $email,
+			);
+			return new WP_REST_Response($response, 200);
+		}
 	}
 }
 new Rest_Demo();
