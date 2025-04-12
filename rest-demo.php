@@ -39,6 +39,15 @@ class Rest_Demo{
 			'methods' => 'GET',
 			'callback' => array($this,'greet'),
 		));
+		register_rest_route('rest-demo/v1', '/person', array(
+			'methods' => 'POST',
+			'callback' => array($this,'process_person'),
+		));
+		register_rest_route('rest-demo/v1', '/contact', array(
+			'methods' => array('POST', 'GET'),
+			'callback' => array($this,'handle_contact'),
+		));
+
 	}
 	function hello(){
 		$response = array(
@@ -91,6 +100,15 @@ class Rest_Demo{
 		$name = $request['name'];
 		$response = array(
 			"message" => "Hello $name",
+		);
+		return new WP_REST_Response($response, 200);
+	}
+	function process_person($request){
+		$name = $request['name'];
+		$email = $request['email'];
+		$response = array(
+			"name" => $name,
+			"email" => $email,
 		);
 		return new WP_REST_Response($response, 200);
 	}
